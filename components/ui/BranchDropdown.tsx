@@ -1,4 +1,3 @@
-// BranchDropdown.tsx
 import React, { useState } from 'react';
 
 const branchLocations = [
@@ -22,17 +21,19 @@ const BranchDropdown = ({ onBranchChange }: { onBranchChange: (branch: string) =
   };
 
   return (
-    <div style={{ position: 'relative', width: '60%', marginTop: '20px', zIndex: 1000 }}>
+    <div style={{ position: 'relative', width: '100%', marginTop: '10px', zIndex: 1000 }}>
       {/* Clickable Box */}
       <div
         style={{
-          padding: '8px',
+          padding: '12px 16px', // Increased padding for a larger clickable area
           backgroundColor: '#007bff',
           color: '#fff',
           borderRadius: '4px',
           cursor: 'pointer',
           textAlign: 'center',
           fontSize: '16px',
+          width: '100%', // Ensure the box takes full width
+          boxSizing: 'border-box', // Ensure padding is included in the width
         }}
         onClick={toggleDropdown}
       >

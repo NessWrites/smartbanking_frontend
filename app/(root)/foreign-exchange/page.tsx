@@ -8,7 +8,7 @@ const MyBanks = async () => {
 
 
   return (
-    <div>page</div>
+    <div>Foreign Exchange</div>
   )
 }
 
