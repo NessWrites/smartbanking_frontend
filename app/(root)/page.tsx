@@ -8,12 +8,13 @@ import Image from "next/image"
 import { signIn } from '@/lib/actions/user.actions'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import RecentTransactions from '@/components/ui/RecentTransactions';
 //import { fetchUserDetails } from '@/lib/actions/user.actions'
 
 
 const Home = () => {	
 
-const [userData, setUserData] = useState<{ username: string; firstName: string; lastName: string } | null>(null);
+const [userData, setUserData] = useState<{  username: string; firstName: string; lastName: string } | null>(null);
 const [balance, setBalance] = useState<number | null>(null);
 const [transactions, setTransactions] = useState<any[]>([]);
 const router = useRouter();
@@ -58,18 +59,7 @@ const router = useRouter();
 		  setBalance(balanceData.balance);
 
   
-		  // Fetch transaction history
-		  const transactionResponse = await fetch("http://localhost:8000/api/account-statement", {
-			method: "GET",
-			headers: {
-			  Authorization: `Bearer ${token}`,
-			  "Content-Type": "application/json",
-			},
-		  });
-  
-		  if (!transactionResponse.ok) throw new Error("Failed to fetch transactions");
-		  const transactionsData = await transactionResponse.json();
-		  setTransactions(transactionsData);
+		 
 		} catch (error) {
 		  console.error("Error fetching user data:", error);
 		  router.push("/"); // Redirect if token is invalid
@@ -100,13 +90,15 @@ const router = useRouter();
 	totalCurrentBalance ={balance}
 	/>
 </header>
-RECENT TRANSACTIONS
+<RecentTransactions
+
+transaction = {transactions}/>
 </div>
 
 <RightSidebar
 user = {userData ? userData.firstName : "Guest"} transactions={[]}
 
-banks = {[{currentBalance:1234.50}, {currentBalance:2234.50}]}
+banks = {[{currentBalance:"1234.50"}, {currentBalance:2234.50}]}
 />
 	</section>
   )
