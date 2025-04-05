@@ -96,9 +96,8 @@ transaction = {transactions}/>
 </div>
 
 <RightSidebar
-user = {userData ? userData.firstName : "Guest"} transactions={[]}
+user = {userData ? userData.firstName : "Guest"} 
 
-banks = {[{currentBalance:"1234.50"}, {currentBalance:2234.50}]}
 />
 	</section>
   )

@@ -161,6 +161,8 @@
     xl:overflow-y-scroll !important;
   }
 
+
+  
   .profile-banner {
     @apply h-[120px] w-full bg-gradient-mesh bg-cover bg-no-repeat;
   }
@@ -790,4 +792,7 @@ top: 100px;;
 .history-message.bot {
   background-color: #f9f9f9;
 }
+
+
+
 

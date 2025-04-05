@@ -219,8 +219,8 @@ const AuthForm = ({type}:{type: string}) => {
 			<footer className = "flex justify-center gap-1">
 				<p className = "text-14 font-normal text-gray-600">
 					{type ==='sign-in'?
-					"Don't have an account?"
-				:"Already have an account>"}
+					"Forgot your password?"
+				:"An OTP is sent to your registered phone number>"}
 				</p >
 				<Link href = {type ==='sign-in'? '/sign-up':
 					'/sign-in'

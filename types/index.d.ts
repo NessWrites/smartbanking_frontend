@@ -225,8 +225,8 @@ declare interface FooterProps {
 
 declare interface RightSidebarProps {
   user: User|string;
-  transactions: Transaction[];
-  banks: Bank[] & Account[];
+  transactions?: Transaction[];
+  banks?: Bank[] & Account[];
 }
 
 declare interface SiderbarProps {
@@ -353,4 +353,14 @@ type Message={
 
 declare interface ChatHistoryProps{
   messages: Message[];
+}
+
+// Add this to your existing props interface
+interface ForeignExchangeCardProps {
+  selectedDate?: string;
+}
+
+interface Currency {
+  code: string;
+  name: string;
 }
