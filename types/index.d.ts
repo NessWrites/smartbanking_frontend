@@ -7,7 +7,7 @@ declare type SearchParamProps = {
 
 // ========================================
 
-declare type SignUpParams = {
+declare type changePassword = {
   firstName?: string;
   lastName?: string;
   address?: string;
@@ -22,7 +22,11 @@ declare type SignUpParams = {
   phoneNumber?: string;
   username?: string;
   password?: string;
-  retypePassword?: string
+  retypePassword?: string;
+  verify_otp_and_change_password?: boolean;
+  otp_code?: string;
+  new_password?: string;
+  confirm_password?: string;
 
 };
 

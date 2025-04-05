@@ -17,9 +17,9 @@ export const signIn = async ({ username, password }: { username: string, passwor
     }
 };
 
-export const signUp = async (userData: SignUpParams) => {
+export const changePassword = async (userData: changePassword) => {
     try {
-        const response = await fetch("http://localhost:8000/api/create_user", {
+        const response = await fetch("http://localhost:8000/api/change-password", {
             method: "POST",
             body: JSON.stringify(userData), // No need to wrap in an object
             headers: { "Content-Type": "application/json" }

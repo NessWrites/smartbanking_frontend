@@ -209,6 +209,7 @@ export const authFormSchema = (type: string) => {
     email: type === 'sign-in' ? z.string().optional() : z.string().min(5),
     accountNumber: type === 'sign-in' ? z.string().optional() : z.string().min(5),
     phoneNumber: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    otp: type === 'sign-in'? z.string().optional() : z.string().min(5),
     username: z.string().min(10, {
       message: "Username must be at least 10 digits.",
     }),
