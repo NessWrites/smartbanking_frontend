@@ -53,7 +53,7 @@ const AuthForm = ({type}:{type: string}) => {
 		setIsLoading(true);
 		try{
 			//Sign up with Appwrite and clean plain token
-			if(type === 'sign-up'){
+			if(type === 'change-password'){
 				const newUser = await signUp(data);
 				setuser(newUser);
 
@@ -125,13 +125,13 @@ const AuthForm = ({type}:{type: string}) => {
 		{user 
 		? 'Link Account':type ==='sign-in'?
 		'Sign In':
-		'Sign Up'
+		'Reset Password'
 		}
 		<p className = "text-16 front-normal text-gray-600">
 
 			{user
 			? 'Link your Account to get Started':
-			'Please enter your login details'
+			'Enter your new password'
 			}
 		</p>
 
@@ -149,42 +149,11 @@ const AuthForm = ({type}:{type: string}) => {
 		<Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
       {/* <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit(onSubmit)(e); }} className="space-y-8"> */}
-	  {type ==='sign-up' && (
+	  {type ==='change-password' && (
 			<>
-			<div className = "flex gap-4">
-				<CustomInput control = {form.control}
-				name = 'firstName' label ="First Name"
-				placeholder = 'Enter your first name'/>
-				<CustomInput control = {form.control}
-				name = 'lastName' label ="Last Name"
-				placeholder = 'Enter your last name'/>
-			</div>
+			
+		
 
-			<CustomInput control = {form.control}
-			name = 'address' label ="Address"
-			placeholder = 'Enter your specific address'/>
-
-			<CustomInput control = {form.control}
-			name = 'city' label ="City"
-			placeholder = 'Enter your City Area'/>
-			<div className = "flex gap-4">
-
-			<CustomInput control = {form.control}
-				name = 'district' label ="District"
-				placeholder = 'example: Kathmandu'/>
-				<CustomInput control = {form.control}
-				name = 'provinces' label ="Provinces"
-				placeholder = 'example: Bagmati'/>
-			</div>
-
-			<div className = "flex gap-4">
-			<CustomInput control = {form.control}
-			name = 'dateOfBirth' label ="Date of Birth"
-			placeholder = 'example: YYYY-MM-DD'/>
-			<CustomInput control = {form.control}
-			name = 'panNumber' label ="Pan Number"
-			placeholder = '1234567890'/>
-			</div>
 			
 			</>
 		)}
@@ -197,6 +166,15 @@ const AuthForm = ({type}:{type: string}) => {
 		control = {form.control} name ='password' label = 'Password'
 		placeholder = 'Enter your password'
 		/> 
+		{type === 'change-password' && (
+                <CustomInput
+                  control={form.control} 
+                  name='retypePassword' // Make sure this matches your schema
+                  label='Confirm Password'
+                  placeholder='Retype your password'
+                />
+              )}
+		
 
 
 
@@ -210,22 +188,23 @@ const AuthForm = ({type}:{type: string}) => {
 				Loading...
 				</>)
 				:type === 'sign-in'
-				?'Sign In':'Sign Up'
+				?'Sign In':'Change Password'
 			}
 		</Button>
 		</div>
       </form>
     </Form>
 			<footer className = "flex justify-center gap-1">
-				<p className = "text-14 font-normal text-gray-600">
+				<p className = "text-14 font-normal text-gray-600 whitespace-pre-line">
 					{type ==='sign-in'?
-					"Forgot your password?"
+					"Forgot your password? An OTP will be sent to your registered phone number"
+
 				:"An OTP is sent to your registered phone number>"}
 				</p >
-				<Link href = {type ==='sign-in'? '/sign-up':
+				<Link href = {type ==='sign-in'? '/change-password':
 					'/sign-in'
 				}>
-					{type ==='sign-in'? 'Sign Up':
+					{type ==='sign-in'? ' Send OTP':
 					'Sign In'
 				}
 
