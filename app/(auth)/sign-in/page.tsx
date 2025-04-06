@@ -46,6 +46,12 @@ const SignIn = () => {
       <h2 className="fixed bottom-10 right-10 w-full text-right font-extrabold text-blue-600 text-2xl bg-white py-2 z-50">
   With secure ATM withdraw
 </h2>
+{/* Disclaimer Footer */}
+<footer className="fixed bottom-0 left-0 w-full bg-gray-800 text-white text-center py-2 z-50">
+        <p className="text-sm">
+          You need to apply at bank for online banking to get login credentials
+        </p>
+      </footer>
     </section>
   )
 }

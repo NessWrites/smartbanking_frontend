@@ -55,20 +55,27 @@ const AuthForm = ({type}:{type: string}) => {
 	  const handleChangePasswordClick = async (values: z.infer<typeof formSchema>) => {
         setIsLoading(true);
         setErrorMessage(null);
+		console.log('Form values:', values);
         
         try {
+			if (!values.username) {
+				throw new Error('Phone number is required');
+			}
             // First send OTP
             const otpResponse = await fetch("http://localhost:8000/api/change-password/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem('authToken')}`
+                    
                 },
-                body: JSON.stringify({ send_otp: true })
+                body: JSON.stringify({ 
+					send_otp: true ,
+					phone_number: values.username})
             });
+			const otpData = await otpResponse.json();
 
             if (!otpResponse.ok) {
-                throw new Error('Failed to send OTP');
+                throw new Error(otpData.error || 'Failed to send OTP');
             }
 
             // Show OTP dialog
@@ -81,34 +88,45 @@ const AuthForm = ({type}:{type: string}) => {
     };
 
     const handleOtpSubmit = async () => {
-        setIsLoading(true);
-        setErrorMessage(null);
-        
-        try {
-            const values = form.getValues();
-            const response = await changePassword({
-                verify_otp_and_change_password: true,
-                otp_code: otp,
-                new_password: values.password,
-                confirm_password: values.retypePassword,
-            });
-
-            if (response.ok) {
-                setShowOtpDialog(false);
-                setShowSuccessDialog(true);
-                setTimeout(() => {
-                    setShowSuccessDialog(false);
-                    router.push('/sign-in');
-                }, 2000);
-            } else {
-                setErrorMessage(response.error || 'Failed to change password');
-            }
-        } catch (error: any) {
-            setErrorMessage(error.message || 'Failed to change password');
-        } finally {
-            setIsLoading(false);
-        }
-    };
+		setIsLoading(true);
+		setErrorMessage(null);
+		
+		try {
+			const values = form.getValues();
+			const response = await fetch("http://localhost:8000/api/change-password/", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					
+					
+				},
+				body: JSON.stringify({
+					verify_otp_and_change_password: true,
+					phone_number: values.username,
+					otp_code: otp,
+					new_password: values.password,
+					confirm_password: values.retypePassword,
+				})
+			});
+	
+			const data = await response.json();
+	
+			if (response.ok) {
+				setShowOtpDialog(false);
+				setShowSuccessDialog(true);
+				setTimeout(() => {
+					setShowSuccessDialog(false);
+					router.push('/sign-in');
+				}, 2000);
+			} else {
+				setErrorMessage(data.error || 'Failed to change password');
+			}
+		} catch (error: any) {
+			setErrorMessage(error.message || 'Failed to change password');
+		} finally {
+			setIsLoading(false);
+		}
+	};
 	 
 	  // 2. Define a submit handler.
 	  const onSubmit= async(
@@ -120,30 +138,30 @@ const AuthForm = ({type}:{type: string}) => {
 		setErrorMessage(null);
 		setIsLoading(true);
 		try{
-			//Sign up with Appwrite and clean plain token
-			if (type === 'change-password') {
-				// Handle password change with OTP
-				const response = await changePassword( {
+			// //Sign up with Appwrite and clean plain token
+			// if (type === 'change-password') {
+			// 	// Handle password change with OTP
+			// 	const response = await changePassword( {
 				 
-					verify_otp_and_change_password: true,
-					otp_code: data.otp,
-					new_password: data.password,
-					confirm_password: data.retypePassword,
-				  })
+			// 		verify_otp_and_change_password: true,
+			// 		otp_code: data.otp,
+			// 		new_password: data.password,
+			// 		confirm_password: data.retypePassword,
+			// 	  })
 			
 		
 			
 				
-				if (response.ok) {
-				  router.push('/sign-in'); // Redirect to login after successful password change
-				} else {
-				  setErrorMessage(response.error || 'Failed to change password');
-				}
+				// if (response.ok) {
+				//   router.push('/sign-in'); // Redirect to login after successful password change
+				// } else {
+				//   setErrorMessage(response.error || 'Failed to change password');
+				// }
 			   
 
 				
 
-			}
+			// }
 			if(type ==='sign-in'){
 				const response = await signIn({
 					username: data.username,
@@ -233,15 +251,7 @@ const AuthForm = ({type}:{type: string}) => {
 		<Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
       {/* <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit(onSubmit)(e); }} className="space-y-8"> */}
-	  {type ==='change-password' && (
-			<>
-			
-		
-
-			
-			</>
-		)}
-
+	  
 		<CustomInput
 		control = {form.control} name ='username' label = 'Username'
 		placeholder = 'Enter your phone number'
@@ -263,25 +273,28 @@ const AuthForm = ({type}:{type: string}) => {
 
 
 		<div className = "flex flex-col gap-4">
-        <Button type="submit" disabled = {isLoading}
-		className = "form-btn">
-			{isLoading?(
-				<>
-				<Loader2 size ={20}
-				className = "animate-spin"/>&Nanum_Brush_Script;
-				Loading...
-				</>)
-				:type === 'sign-in'
-				?'Sign In':'Change Password'
-			}
-		</Button>
+        <Button 
+                        type={type === 'sign-in' ? 'submit' : 'button'}
+                        disabled={isLoading}
+                        onClick={type === 'change-password' ? () => handleChangePasswordClick(form.getValues()) : undefined}
+                        className="form-btn"
+                    >
+                        {isLoading ? (
+                            <>
+                                <Loader2 size={20} className="animate-spin" /> 
+                                Loading...
+                            </>
+                        ) : (
+                            type === 'sign-in' ? 'Sign In' : 'Change Password'
+                        )}
+                    </Button>
 		</div>
       </form>
     </Form>
 			<footer className = "flex justify-center gap-1">
 				<p className = "text-14 font-normal text-gray-600 whitespace-pre-line">
 					{type ==='sign-in'?
-					"Forgot your password? An OTP will be sent to your registered phone number"
+					"Forgot your password?"
 
 				:"An OTP is sent to your registered phone number"}
 				</p >
@@ -295,10 +308,12 @@ const AuthForm = ({type}:{type: string}) => {
 				</Link>
 				{/* OTP Verification Dialog */}
 				<Dialog open={showOtpDialog} onOpenChange={setShowOtpDialog}>
-                <DialogContent>
+                <DialogContent
+				className="bg-white opacity-100 p-6 rounded-lg shadow-lg" // Ensure full opacity and solid background
+				style={{ opacity: 1 }}> // Inline style to guarantee 100% opacity
                     <DialogHeader>
-                        <DialogTitle>Enter OTP</DialogTitle>
-                        <DialogDescription>
+                        <DialogTitle className="text-2xl font-semibold" >Enter OTP</DialogTitle>
+                        <DialogDescription className="text-gray-600">
                             We've sent an OTP to your registered phone number
                         </DialogDescription>
                     </DialogHeader>
@@ -327,10 +342,13 @@ const AuthForm = ({type}:{type: string}) => {
 
             {/* Success Dialog */}
             <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
-                <DialogContent>
+                <DialogContent
+				className="bg-white opacity-100 p-6 rounded-lg shadow-lg" // Ensure full opacity
+				style={{ opacity: 1 }}
+			  >
                     <DialogHeader>
-                        <DialogTitle>Password Changed!</DialogTitle>
-                        <DialogDescription>
+                        <DialogTitle className="text-2xl font-semibold">Password Changed!</DialogTitle>
+                        <DialogDescription className="text-gray-600">
                             Your password has been updated successfully.
                         </DialogDescription>
                     </DialogHeader>

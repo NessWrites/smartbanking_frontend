@@ -24,11 +24,15 @@ export const changePassword = async (userData: changePassword) => {
             body: JSON.stringify(userData), // No need to wrap in an object
             headers: { "Content-Type": "application/json" }
         });
+        const data = await response.json();
+        if (!response.ok) {
+            return { ok: false, error: data.message || 'Failed to change password' };
+        }
 
-        return await response.json();
+        return { ok: true, data };
     } catch (error) {
-        console.error("Error signing up:", error.message);
-        throw error;
+        console.error("Error changing password:", error.message);
+        return { ok: false, error: error.message };
     }
 };
 

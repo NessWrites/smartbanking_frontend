@@ -27,6 +27,7 @@ declare type changePassword = {
   otp_code?: string;
   new_password?: string;
   confirm_password?: string;
+  send_otp?: boolean;
 
 };
 
