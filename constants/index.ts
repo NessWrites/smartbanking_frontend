@@ -4,16 +4,16 @@ export const sidebarLinks = [
     route: "/",
     label: "Home",
   },
-  {
-    imgURL: "/icons/dollar-circle.svg",
-    route: "/my-banks",
-    label: "My Banks",
-  },
-  {
-    imgURL: "/icons/transaction.svg",
-    route: "/transaction-history",
-    label: "Transaction History",
-  },
+  // {
+  //   imgURL: "/icons/dollar-circle.svg",
+  //   route: "/my-banks",
+  //   label: "My Banks",
+  // },
+  // {
+  //   imgURL: "/icons/transaction.svg",
+  //   route: "/transaction-history",
+  //   label: "Transaction History",
+  // },
   {
     imgURL: "/icons/atm.svg",
     route: "/withdrawl",
