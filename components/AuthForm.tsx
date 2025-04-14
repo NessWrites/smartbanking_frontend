@@ -260,6 +260,14 @@ const AuthForm = ({type}:{type: string}) => {
 		control = {form.control} name ='password' label = 'Password'
 		placeholder = 'Enter your password'
 		/> 
+
+		{/* Add the error message display here */}
+		{errorMessage && (
+      <div className="text-red-500 text-sm mt-2 text-center">
+        {errorMessage}
+      </div>
+    )}
+	
 		{type === 'change-password' && (
                 <CustomInput
                   control={form.control} 

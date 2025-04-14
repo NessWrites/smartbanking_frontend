@@ -9,13 +9,22 @@ export const signIn = async ({ username, password }: { username: string, passwor
             body: JSON.stringify({ username, password }),
             headers: { "Content-Type": "application/json" }
         });
+        const data = await response.json();
 
-        return await response.json();
-    } catch (error) {
-        console.error("Error signing in:", error.message);
-        throw error;
+    if (!response.ok) {
+      throw new Error(data.detail || 'Login failed');
     }
-};
+
+    if (!data.access) {
+      throw new Error('No access token received');
+    }
+
+        return  data;
+    } catch (error) {
+        console.error("Error signing in:", error instanceof Error ? error.message : 'Unknown error');
+        throw error;
+      }
+    };
 
 export const changePassword = async (userData: changePassword) => {
     try {

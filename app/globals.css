@@ -825,6 +825,15 @@ top: 100px;;
   background-color: #f9f9f9;
 }
 
+/* Add to your global CSS */
+.text-red-500 {
+  color: #ef4444;
+}
 
+.form-error {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
 
 
