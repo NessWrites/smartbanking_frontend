@@ -148,7 +148,10 @@ const Chatbot = () => {
   return (
     <div className="chatbot">
       <div className="container">
-        <h1 className="title">Smart Chatbot</h1>
+      <h1 className="2xl:text-26 font-ibm-plex-serif text-[26px] font-bold text-blue-800 max-xl:hidden text-center mx-auto">
+  Smart Chatbot
+</h1>
+
         <div className="chat-window" ref={chatWindowRef}>
           {messages.map((msg, index) => (
             <div key={index} className={`message ${msg.role}`}>

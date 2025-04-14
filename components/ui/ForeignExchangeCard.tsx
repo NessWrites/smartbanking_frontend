@@ -112,7 +112,6 @@ const ForeignExchangeCard = ({ selectedDate }: ForeignExchangeCardProps) => {
   return (
     <div className="flex flex-col bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
       <div className="flex justify-between mb-6">
-        <h2 className="text-xl font-bold text-gray-800">Currency Converter</h2>
         <button className="text-blue-600 font-semibold">Quick Conversion</button>
       </div>
 
@@ -153,19 +152,7 @@ const ForeignExchangeCard = ({ selectedDate }: ForeignExchangeCardProps) => {
       </div>
 
       <div className="flex justify-center mb-6">
-        <button 
-          onClick={handleSwapCurrencies}
-          disabled={isLoading}
-          className="p-2 rounded-full hover:bg-gray-100"
-          aria-label="Swap currencies"
-        >
-          <Image 
-            src="/icons/swap.png" 
-            width={124} 
-            height={124} 
-            alt="Swap currencies" 
-          />
-        </button>
+        
       </div>
 
       <div className="mb-6">
@@ -222,13 +209,7 @@ const ForeignExchangeCard = ({ selectedDate }: ForeignExchangeCardProps) => {
   </div>
 )}
 
-      <button 
-        onClick={handleConvert}
-        disabled={isLoading}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isLoading ? 'Converting...' : 'Convert'}
-      </button>
+      
 
       {selectedDate && (
         <p className="text-xs text-gray-500 mt-4 text-center">
