@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 interface Transaction {
   transactionID: string;
@@ -26,36 +27,54 @@ function TransactionsTable({ transactions }: { transactions: Transaction[] }) {
 
   return (
     <Table>
-      <TableCaption>A list of your recent Banking Transactions.</TableCaption>
+      <TableCaption className="text-lg">A list of your recent Banking Transactions.</TableCaption>
       <TableHeader className="bg-[#f9fafb]">
-        <TableRow>
-          <TableHead className="px-2">Date</TableHead>
-          <TableHead>Reference</TableHead>
-          <TableHead className="px-2">Description</TableHead>
-          <TableHead className="px-2">Debit</TableHead>
-          <TableHead className="px-2">Credit</TableHead>
+        <TableRow className="py-16">
+          <TableHead className="px-2 text-16 font-semibold text-[#344054]">Date</TableHead>
+          <TableHead className="px-2 text-16 font-semibold text-[#344054]">Reference</TableHead>
+          <TableHead className="px-2 text-16 font-semibold text-[#344054]">Description</TableHead>
+          <TableHead className="px-2 text-16 font-semibold text-[#344054]">Debit</TableHead>
+          <TableHead className="px-2 text-16 font-semibold text-[#344054]">Credit</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {transactions.map((transaction) => {
-          // Convert string values to numbers
           const typeId = parseInt(transaction.transactionTypeID, 10);
           const amount = parseFloat(transaction.amount);
-          
+          const isDebit = typeId === 1;
+          const isCredit = typeId === 2;
+
           return (
-            <TableRow key={transaction.transactionID}>
-              <TableCell className="px-2">{transaction.date}</TableCell>
-              <TableCell>{transaction.reference}</TableCell>
-              <TableCell className="px-2">{transaction.description}</TableCell>
-              <TableCell className="px-2">
-                {typeId === 1 
-                  ? `$${amount.toFixed(2)}` 
-                  : '-'}
+            <TableRow
+              key={transaction.transactionID}
+              className={cn(
+                `${isDebit ? 'bg-[#FFFBFA]' : 'bg-[#F6FEF9]'} !border-b-DEFAULT py-6`
+              )}
+            >
+              <TableCell className="max-w-[150px] pl-2 pr-10">
+                <div className="flex items-center gap-3">
+                  <h1 className="text-16 truncate font-semibold text-[#344054]">
+                    {transaction.date}
+                  </h1>
+                </div>
               </TableCell>
-              <TableCell className="px-2">
-                {typeId === 2 
-                  ? `$${amount.toFixed(2)}` 
-                  : '-'}
+              <TableCell className="pl-2 pr-10 text-16">{transaction.reference}</TableCell>
+              <TableCell className="pl-2 pr-10 text-16">{transaction.description}</TableCell>
+              <TableCell
+                className={cn(
+                  'pl-2 pr-10 font-semibold text-16',
+                  isDebit ? 'text-[#f04438]' : 'text-[#039855]'
+                )}
+              >
+                {isDebit ? `$${amount.toFixed(2)}` : '-'}
+              </TableCell>
+              <TableCell
+                className={cn(
+                  'pl-2 pr-10 font-semibold text-16',
+                  isCredit ? 'text-[#039855]' : 'text-[#f04438]'
+                )}
+              >
+                {isCredit ? `$${amount.toFixed(2)}` : '-'}
               </TableCell>
             </TableRow>
           );

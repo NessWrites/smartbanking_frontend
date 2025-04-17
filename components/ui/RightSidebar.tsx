@@ -10,15 +10,30 @@ interface RightSidebarProps {
 const RightSidebar = ({ user }: RightSidebarProps) => {
   const displayName = typeof user === "object" ? user.firstName : user;
   const lastName = typeof user === "object" ? user.lastName : user;
-  const [selectedDate, setSelectedDate] = useState<string>(() => {
+
+  // Set initial date to today or earlier
+  const getInitialDate = () => {
     const today = new Date();
-    return today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-  });
+    return today.toISOString().split('T')[0]; // Format as YYYY-MM-DD (e.g., "2025-04-13")
+  };
+
+  const [selectedDate, setSelectedDate] = useState<string>(getInitialDate);
 
   // Function to get maximum allowed date (today)
   const getMaxDate = () => {
     const today = new Date();
-    return today.toISOString().split('T')[0];
+    return today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+  };
+
+  // Ensure selected date is not in the future
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = new Date(e.target.value);
+    const today = new Date();
+    if (selected > today) {
+      setSelectedDate(getMaxDate());
+    } else {
+      setSelectedDate(e.target.value);
+    }
   };
 
   return (
@@ -41,12 +56,11 @@ const RightSidebar = ({ user }: RightSidebarProps) => {
         </div>
       </section>
       
-      <section >
+      <section>
         <div className="flex w-full top items-center">
-          
           <div className="flex items-center gap-2">
             <Image 
-              src="/icons/calendar.png"  // Make sure you have this icon
+              src="/icons/calendar.png"
               width={80}
               height={15}
               alt="calendar"
@@ -54,7 +68,7 @@ const RightSidebar = ({ user }: RightSidebarProps) => {
             <input
               type="date"
               value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
+              onChange={handleDateChange}
               max={getMaxDate()}
               className="text-1 font-semibold text-gray-600 bg-transparent border-none focus:outline-none cursor-pointer"
             />

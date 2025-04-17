@@ -1,6 +1,6 @@
 'use server';
 
-"use server"; // Ensures these functions run on the server
+
 
 export const signIn = async ({ username, password }: { username: string, password: string }) => {
     try {

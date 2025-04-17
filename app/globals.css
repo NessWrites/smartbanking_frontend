@@ -404,11 +404,9 @@
 }
 
 .withdraw .overlap {
-  height: 736px;
-  left: 60px;
-  position: absolute;
-  top: 46px;
-  width: 1313px;
+  
+  min-width: 100%;
+  padding-right: 0;
 }
 
 .withdraw .smart-banking-branch {
@@ -836,4 +834,20 @@ top: 100px;;
   line-height: 1.25rem;
 }
 
+.pad-button {
+  width: 15rem;
+  height: 15rem;
+  font-size: 8.125rem;
+  font-weight: 600;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s, transform 0.1s;
+}
 
+.pad-button:hover {
+  background-color: #3b82f6; /* bg-blue-500 */
+  transform: scale(1.05);
+}
+.pad-button:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
