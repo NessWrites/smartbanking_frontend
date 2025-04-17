@@ -33,12 +33,12 @@ const SignIn = () => {
       </div>
 
       {/* New chatbot GIF in lower left corner */}
-      <div className="absolute left-0 bottom-0 z-0 w-[1500px] h-[1000px] -translate-x-1/4 translate-y-3/5 opacity-80">
+      <div className="absolute left-0 bottom-1 z-0 w-[1000px] h-[700px] -translate-x-1/4 translate-y-2/5 opacity-80">
         <Image
           src="/icons/chatbot.gif"
           alt="Chatbot assistant"
-          width={800}
-          height={800}
+          width={650}
+          height={650}
           className="w-full h-full object-contain"
           unoptimized // Recommended for GIFs
         />
