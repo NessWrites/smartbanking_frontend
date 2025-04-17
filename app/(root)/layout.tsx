@@ -3,20 +3,24 @@ import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/ui/MobileNav";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+
 import { useEffect, useState } from "react";
 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<{ firstName: string; lastName: string } | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter(); 
 
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("authToken");
+      router.push("sign-in");
+
       if (!token) return;
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/me", {
+        const response = await fetch("app/(auth)/sign-in/page.tsx", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
