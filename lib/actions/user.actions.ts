@@ -1,6 +1,6 @@
 'use server';
 
-"use server"; // Ensures these functions run on the server
+
 
 export const signIn = async ({ username, password }: { username: string, password: string }) => {
     try {
@@ -9,26 +9,39 @@ export const signIn = async ({ username, password }: { username: string, passwor
             body: JSON.stringify({ username, password }),
             headers: { "Content-Type": "application/json" }
         });
+        const data = await response.json();
 
-        return await response.json();
-    } catch (error) {
-        console.error("Error signing in:", error.message);
-        throw error;
+    if (!response.ok) {
+      throw new Error(data.detail || 'Login failed');
     }
-};
 
-export const signUp = async (userData: SignUpParams) => {
+    if (!data.access) {
+      throw new Error('No access token received');
+    }
+
+        return  data;
+    } catch (error) {
+        console.error("Error signing in:", error instanceof Error ? error.message : 'Unknown error');
+        throw error;
+      }
+    };
+
+export const changePassword = async (userData: changePassword) => {
     try {
-        const response = await fetch("http://localhost:8000/api/create_user", {
+        const response = await fetch("http://localhost:8000/api/change-password", {
             method: "POST",
             body: JSON.stringify(userData), // No need to wrap in an object
             headers: { "Content-Type": "application/json" }
         });
+        const data = await response.json();
+        if (!response.ok) {
+            return { ok: false, error: data.message || 'Failed to change password' };
+        }
 
-        return await response.json();
+        return { ok: true, data };
     } catch (error) {
-        console.error("Error signing up:", error.message);
-        throw error;
+        console.error("Error changing password:", error.message);
+        return { ok: false, error: error.message };
     }
 };
 

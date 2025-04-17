@@ -195,30 +195,45 @@ export const getTransactionStatus = (date: Date) => {
 
   return date > twoDaysAgo ? "Processing" : "Success";
 };
+export const authFormSchema = (type: string) => {
+  const baseSchema = z.object({
+    firstName: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    lastName: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    address: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    district: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    city: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    provinces: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    dateOfBirth: type === 'sign-in' ? z.string().optional() : z.string().min(10),
+    panNumber: type === 'sign-in' ? z.string().optional() : z.string().min(10),
+    createdAt: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    email: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    accountNumber: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    phoneNumber: type === 'sign-in' ? z.string().optional() : z.string().min(5),
+    otp: type === 'sign-in'? z.string().optional() : z.string().min(5),
+    username: z.string().min(10, {
+      message: "Username must be at least 10 digits.",
+    }),
+    password: z.string().min(8, {
+      message: "Password must be of 8 characters"
+    }),
+    ...(type === 'change-password' && {
+      retypePassword: z.string().min(8, {
+        message: "Password must be of 8 characters"
+      })
+    })
+  });
 
-export const authFormSchema =(type:string)=> z.object({
-  
-firstName: type ==='sign-in' ? z.string().optional():z.string().min(5),
-lastName: type ==='sign-in' ? z.string().optional():z.string().min(5),
-address: type ==='sign-in' ? z.string().optional():z.string().min(5),
-district: type ==='sign-in' ? z.string().optional():z.string().min(5),
-city: type ==='sign-in' ? z.string().optional():z.string().min(5),
-provinces: type ==='sign-in' ? z.string().optional():z.string().min(5),
-dateOfBirth: type ==='sign-in' ? z.string().optional():z.string().min(10),
-panNumber: type ==='sign-in' ? z.string().optional():z.string().min(10),
-createdAt: type ==='sign-in' ? z.string().optional():z.string().min(5),
-email: type ==='sign-in' ? z.string().optional():z.string().min(5),
-accountNumber: type ==='sign-in' ? z.string().optional():z.string().min(5),
-phoneNumber: type ==='sign-in' ? z.string().optional():z.string().min(5),
-
-//Sign-in
-username: z.string().min(10, {
-  message: "Username must be at least 10 digits.",
-}),
-password:z.string().min(8,{
-  message: "Passord must be of 8 characters"}),
-  
-  })
+  if (type === 'change-password') {
+    return baseSchema.refine(
+      (data) => data.password === data.retypePassword,
+      {
+        message: "Passwords don't match",
+        path: ["retypePassword"]
+      }
+    );
+  }
+  return baseSchema;
+};
 
 //Authenticated Request
 export const fetchData = async (url: string, options: RequestInit = {}) => {

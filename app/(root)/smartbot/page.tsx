@@ -1,32 +1,36 @@
-// components/Chatbot.tsx
 "use client";
 
-
 import RightChatHistory from "@/components/ui/RightChatHistory";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-// import ChatHistory from "@/components/ui/ChatHistory";
+type ChatHistoryItem = {
+  id: number;
+  question: string;
+  answer: string;
+  created_at: string;
+};
 
-// Define the Message type with specific roles
 type Message = {
   role: "user" | "bot";
   content: string;
 };
 
 const Chatbot = () => {
-  const [messages, setMessages] = useState<Message[]>([]); // Use the Message type
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState<number | null>(null); // Add state for user_id
+  const [userId, setUserId] = useState<number | null>(null);
+  const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [inputRows, setInputRows] = useState(1);
+  const chatWindowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("authToken");
 
-
       if (!token) {
         console.log("No token found. Redirecting to login.");
-        // Redirect to login if no token (you may want to handle this more gracefully in your UI)
         return;
       }
 
@@ -43,13 +47,10 @@ const Chatbot = () => {
           throw new Error("Failed to fetch user data");
         }
         
-        
         const data = await response.json();
-        setUserId(data.accountNumber); // Save user_id in the state
-        
-        // Log the whole user data object
+        setUserId(data.accountNumber);
+        fetchChatHistory(token);
         console.log("Chatbot User Data Object:", data);
-        
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -58,7 +59,50 @@ const Chatbot = () => {
     fetchUserData();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const fetchChatHistory = async (token: string) => {
+    try {
+      const response = await fetch("http://localhost:8000/api/chat-history", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch chat history");
+      
+      const data = await response.json();
+      setChatHistory(data);
+    } catch (error) {
+      console.error("Error fetching chat history:", error);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textareaLineHeight = 24;
+    const previousRows = e.target.rows;
+    e.target.rows = 1;
+    
+    const currentRows = Math.floor(e.target.scrollHeight / textareaLineHeight);
+    
+    if (currentRows === previousRows) {
+      e.target.rows = currentRows;
+    }
+    
+    if (currentRows >= 6) {
+      e.target.rows = 6;
+      e.target.scrollTop = e.target.scrollHeight;
+    } else {
+      e.target.rows = currentRows;
+    }
+    
+    setInputRows(currentRows);
     setInput(e.target.value);
   };
 
@@ -69,27 +113,27 @@ const Chatbot = () => {
 
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+    setInputRows(1); // Reset rows when message is sent
     setLoading(true);
 
     try {
-      
       const response = await fetch("http://localhost:8000/api/chat", {
         method: "POST",
-        headers: {Authorization: `Bearer ${token}`,
-           "Content-Type": "application/json", },
-        
-        body: JSON.stringify({ query: input,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          query: input,
           user_id: userId,
         }),
       });
       
-
       const data = await response.json();
-      if (data && data.response){
-      setMessages((prev) => [
-        ...prev, { role: "bot", content: data.response },
-      ]);
-    }
+      if (data?.response) {
+        setMessages((prev) => [...prev, { role: "bot", content: data.response }]);
+        fetchChatHistory(token);
+      }
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -97,11 +141,18 @@ const Chatbot = () => {
     }
   };
 
+  const toggleExpand = (id: number) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
+
   return (
     <div className="chatbot">
       <div className="container">
-        <h1 className="title">Chatbot</h1>
-        <div className="chat-window">
+      <h1 className="2xl:text-26 font-ibm-plex-serif text-[26px] font-bold text-blue-800 max-xl:hidden text-center mx-auto">
+  Smart Chatbot
+</h1>
+
+        <div className="chat-window" ref={chatWindowRef}>
           {messages.map((msg, index) => (
             <div key={index} className={`message ${msg.role}`}>
               {msg.content.split('\n').map((line, idx) => (
@@ -114,20 +165,31 @@ const Chatbot = () => {
           ))}
         </div>
         <div className="input-area">
-          <input
-            type="text"
+          <textarea
+            rows={inputRows}
             className="chat-input"
             value={input}
             onChange={handleChange}
             placeholder="Type a message..."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }}
           />
           <button className="send-button" onClick={sendMessage} disabled={loading}>
             {loading ? "..." : "Send"}
           </button>
         </div>
       </div>
-      <RightChatHistory messages={messages} />
+      <RightChatHistory 
+        history={chatHistory} 
+        expandedId={expandedId} 
+        onToggle={toggleExpand} 
+      />
     </div>
   );
 };
+
 export default Chatbot;

@@ -1,76 +1,86 @@
-/* eslint-disable */
-import Link from 'next/dist/client/link'
-import React from 'react'
+import { useState } from 'react';
+import Link from 'next/link';
 import Image from "next/image";
-import BankCard from './BankCard';
-const RightSidebar = ({ user, transactions, banks }: 
-	RightSidebarProps) => {
-    const displayName = typeof user === "object" ? user.firstName : user;
-    const lastName = typeof user === "object" ? user.lastName : user;
+import ForeignExchangeCard from './ForeignExchangeCard';
+
+interface RightSidebarProps {
+  user: any;
+}
+
+const RightSidebar = ({ user }: RightSidebarProps) => {
+  const displayName = typeof user === "object" ? user.firstName : user;
+  const lastName = typeof user === "object" ? user.lastName : user;
+
+  // Set initial date to today or earlier
+  const getInitialDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0]; // Format as YYYY-MM-DD (e.g., "2025-04-13")
+  };
+
+  const [selectedDate, setSelectedDate] = useState<string>(getInitialDate);
+
+  // Function to get maximum allowed date (today)
+  const getMaxDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+  };
+
+  // Ensure selected date is not in the future
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = new Date(e.target.value);
+    const today = new Date();
+    if (selected > today) {
+      setSelectedDate(getMaxDate());
+    } else {
+      setSelectedDate(e.target.value);
+    }
+  };
+
   return (
-	<aside className='right-sidebar'>
-		<section className="flex flex-col pb-8">
-		<div className="profile-banner" />
-		<div className="profile">
-		<div className="profile-img">
-		<span className="text-5xl font-bold text-blue-500">{displayName[0]}</span>
-		</div>
+    <aside className='right-sidebar'>
+      <section className="flex flex-col pb-8">
+        <div className="profile-banner" />
+        <div className="profile">
+          <div className="profile-img">
+            <span className="text-5xl font-bold text-blue-500">{displayName[0]}</span>
+          </div>
 
-
-		<div className="profile-details">
+          <div className="profile-details">
             <h1 className='profile-name'>
               {displayName}
             </h1>
             <p className="profile-email">
-              {lastName  }
+              {lastName}
             </p>
           </div>
         </div>
-		</section>
-		
-		<section className="banks">
-        <div className="flex w-full justify-between">
-          <h2 className="header-2">My Banks</h2>
-          <Link href="/" className="flex gap-2">
+      </section>
+      
+      <section>
+        <div className="flex w-full top items-center">
+          <div className="flex items-center gap-2">
             <Image 
-               src="/icons/plus.svg"
-              width={20}
-              height={20}
-              alt="plus"
+              src="/icons/calendar.png"
+              width={80}
+              height={15}
+              alt="calendar"
             />
-            <h2 className="text-14 font-semibold text-gray-600">
-              Add Bank
-            </h2>
-          </Link>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={handleDateChange}
+              max={getMaxDate()}
+              className="text-1 font-semibold text-gray-600 bg-transparent border-none focus:outline-none cursor-pointer"
+            />
+          </div>
         </div>
 
-        {banks?.length > 0 && (
-          <div className="relative flex flex-1 flex-col items-center justify-center gap-5">
-            <div className='relative z-10'>
-              <BankCard 
-                key={banks[0].$id}
-                account={banks[0]}
-                userName={`${displayName} ${lastName}`}
-                showBalance={false}
-              />
-            </div>
-            {banks[1] && (
-              <div className="absolute right-0 top-8 z-0 w-[90%]">
-                <BankCard 
-                  key={banks[1].$id}
-                  account={banks[1]}
-                  userName={`${displayName} ${lastName}`}
-                  showBalance={false}
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        
+        <div className="relative flex flex-1 flex-col items-center justify-center gap-5 mt-4">
+          <ForeignExchangeCard selectedDate={selectedDate} />
+        </div>
       </section>
-		</aside>
-  )
-}
+    </aside>
+  );
+};
 
-export default RightSidebar
+export default RightSidebar;

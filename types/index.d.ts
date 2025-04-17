@@ -7,7 +7,7 @@ declare type SearchParamProps = {
 
 // ========================================
 
-declare type SignUpParams = {
+declare type changePassword = {
   firstName?: string;
   lastName?: string;
   address?: string;
@@ -22,6 +22,13 @@ declare type SignUpParams = {
   phoneNumber?: string;
   username?: string;
   password?: string;
+  retypePassword?: string;
+  verify_otp_and_change_password?: boolean;
+  otp_code?: string;
+  new_password?: string;
+  confirm_password?: string;
+  send_otp?: boolean;
+
 };
 
 
@@ -225,8 +232,8 @@ declare interface FooterProps {
 
 declare interface RightSidebarProps {
   user: User|string;
-  transactions: Transaction[];
-  banks: Bank[] & Account[];
+  transactions?: Transaction[];
+  banks?: Bank[] & Account[];
 }
 
 declare interface SiderbarProps {
@@ -353,4 +360,14 @@ type Message={
 
 declare interface ChatHistoryProps{
   messages: Message[];
+}
+
+// Add this to your existing props interface
+interface ForeignExchangeCardProps {
+  selectedDate?: string;
+}
+
+interface Currency {
+  code: string;
+  name: string;
 }
