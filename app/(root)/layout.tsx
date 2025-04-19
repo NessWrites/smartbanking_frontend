@@ -15,12 +15,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("authToken");
-      router.push("sign-in");
+      
 
-      if (!token) return;
+      if (!token) 
+      router.push("sign-in")
+      return;
 
       try {
-        const response = await fetch("app/(auth)/sign-in/page.tsx", {
+        const response = await fetch("http://127.0.0.1:8000/api/me", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
