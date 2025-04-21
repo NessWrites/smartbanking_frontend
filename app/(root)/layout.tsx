@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       
 
       if (!token) 
-      router.push("sign-in")
+      
       return;
 
       try {

@@ -147,12 +147,26 @@ const Withdraw = () => {
   };
 
   return (
+    
     <div className="withdraw">
-      <div className="div">
+      {/* <div className="background-image-container">
+    <Image
+      src="/icons/love.png"
+      alt="ATM Background"
+      layout="fill"
+      objectFit="cover"
+      quality={100}
+      className="background-image"
+    />
+  </div> */}
+
+
+      <div className="withdraw div">
         <div className="overlap relative">
           <div className="smart-banking-dropdown">
+            
             <label htmlFor="branch-select" className="span">
-              Branch Location:
+              Branch :
             </label>
             <select
               id="branch-select"
@@ -169,10 +183,7 @@ const Withdraw = () => {
             </select>
           </div>
           <div className="smart-banking-branch">
-            <span>
-              Smart Banking
-              <br />
-            </span>
+            
           </div>
           <section className="text-wrapper-2">
             ATM Simulation
@@ -197,8 +208,8 @@ const Withdraw = () => {
                 </tr>
                 <tr>
                   <td className="p-1"><button className="pad-button" onClick={() => handleDigitClick('0')}>0</button></td>
-                  <td className="p-1"><button className="pad-button bg-red-500 hover:bg-red-700 hover:scale-105 text-white" onClick={handleDelete}>Del</button></td>
-                  <td className="p-1"><button className="pad-button bg-green-500 hover:bg-green-700 hover:scale-105 text-white" onClick={handleEnter}>Enter</button></td>
+                  <td className="p-1"><button className="pad-button bg-red-500 hover:bg-red-700 hover:scale-105 text-white" onClick={handleDelete}style={{ fontSize: '3.5rem' }}>Del</button></td>
+                  <td className="p-1"><button className="pad-button bg-green-500 hover:bg-green-700 hover:scale-105 text-white" onClick={handleEnter}style={{ fontSize: '3.5rem' }}>Enter</button></td>
                 </tr>
               </tbody>
             </table>
@@ -227,7 +238,7 @@ const Withdraw = () => {
             </span>
             <span className="text-wrapper-4">Help us make banking secure!</span>
           </p>
-          <p>Maximum Withdraw limit: 100,000</p>
+          
         </div>
       </div>
 
@@ -259,6 +270,7 @@ const Withdraw = () => {
       )}
 
       <style jsx>{`
+     
         @media (max-width: 640px) {
           .number-pad-container {
             position: static !important;

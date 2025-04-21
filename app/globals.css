@@ -388,24 +388,28 @@
 }
 
 .withdraw {
-  background-color: #ffffff;
+  background-image: url('/icons/love.png'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
   display: flex;
   flex-direction: row;
-  position: relative;
   justify-content: center;
   width: 100%;
 }
 
+
 .withdraw .div {
   background-color: #ffffff;
-  height: 1024px;
+  height: 524px;
   overflow: hidden;
   position: relative;
-  width: 1440px;
+
 }
 
 .withdraw .overlap {
-  
+  top:-90px;
   min-width: 100%;
   padding-right: 0;
 }
@@ -428,7 +432,10 @@
 .withdraw .smart-banking-dropdown{
 
 position: relative;
-top: 100px;;
+top: 100px;
+display: flex; /* Use flexbox to stack elements vertically */
+
+gap: 8px; /* Add spacing between label and dropdown */
 
 
 
@@ -441,40 +448,41 @@ top: 100px;;
 }
 
 .withdraw .span {
-  font-family: "Inter-Regular", Helvetica;
-  font-size: 24px;
+  font-family: "Roboto";
+  font-size: 34px;
   display: flex;
   font-weight: 500px;
-  color: #2f8aff;
-  position: absolute;
-  top:10px;
-  width: 500px;
+  color: #0d67dc;
+  /* top:10px;
+  width: 500px; */
+  position: static; /* Remove absolute positioning */
+
   
 
 }
 
 .withdraw .overlap-group {
-  height: 684px;
   left: 0;
-  position: absolute;
-  top: 52px;
+  position: relative;
+  top: 10px;
   width: 1313px;
 }
 
 .withdraw .text-wrapper-2 {
-  color: #2f8aff;
-  font-family: "Hind-Bold", Helvetica;
+  color: #547bae;
+  position: relative;
+  font-family: "Hind-Bold", Roboto;
   font-size: 50px;
   font-weight: 700;
-  left: 855px;
-  top:-10px;
+  left: 755px;
+  top:125px;
   line-height: normal;
   position: absolute;
 }
 
 .withdraw .please-enter-the {
-  color: #153ff6;
-  font-family: "Inter-Regular", Helvetica;
+  color: #6275cc;
+  font-family: "Inter-Regular", Roboto;
   font-size: 30px;
   font-weight: 400;
   left: 0;
@@ -514,8 +522,8 @@ top: 100px;;
 
 .withdraw .NPR {
   color: #504b4b;
-  font-family: "Kanit-Light", Helvetica;
-  font-size: 64px;
+  font-family: "Kanit-Light", Roboto;
+  font-size: 54px;
   font-weight: 300;
   left: 21px;
   letter-spacing: 0;
@@ -526,11 +534,12 @@ top: 100px;;
 }
 
 .withdraw .please-do-not-share {
-  color: #000000;
-  font-family: "Inter-Regular", Helvetica;
-  font-size: 30px;
+  color: #687adf;
+  font-family: "Inter-Regular", Roboto;
+  font-size: 20px;
   font-weight: 400;
   left: 5px;
+  bottom:100px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
@@ -539,16 +548,17 @@ top: 100px;;
 }
 
 .withdraw .text-wrapper-3 {
-  color: #000000;
-  font-family: "Inter-Regular", Helvetica;
-  font-size: 30px;
+  color: #515eb5;
+  font-family: "Inter-Regular", Roboto;
+  font-size: 25px;
   font-weight: 400;
   letter-spacing: 0;
 }
 
 .withdraw .text-wrapper-4 {
-  font-family: "Inter-Light", Helvetica;
+  font-family: "ArialLight", Roboto;
   font-weight: 300;
+  
 }
 
 .withdraw .overlap-2 {
@@ -572,7 +582,7 @@ top: 100px;;
 
 .withdraw .text-wrapper-5 {
   color: #000000;
-  font-family: "Inter-Regular", Helvetica;
+  font-family: "Inter-Regular", Roboto;
   font-size: 32px;
   font-weight: 400;
   left: 103px;
@@ -594,7 +604,7 @@ top: 100px;;
 
 .withdraw .text-wrapper-6 {
   color: #000000;
-  font-family: "Inter-Regular", Helvetica;
+  font-family: "Inter-Regular", Roboto;
   font-size: 32px;
   font-weight: 400;
   left: 26px;
@@ -839,11 +849,14 @@ top: 100px;;
 }
 
 .pad-button {
-  width: 15rem;
-  height: 15rem;
-  font-size: 8.125rem;
+  position: relative;
+  left: -240px;
+  top: 110px;
+  width: 11rem;
+  height: 8rem;
+  font-size: 6.125rem;
   font-weight: 600;
-  background-color: #e5e7eb;
+  background-color: #768fc1;
   border-radius: 0.25rem;
   transition: background-color 0.2s, transform 0.1s;
 }
